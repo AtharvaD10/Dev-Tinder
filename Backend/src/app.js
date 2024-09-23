@@ -4,14 +4,10 @@ const User = require("./models/user");
 
 
 const app = express();
+app.use(express.json())
 
 app.post("/signup",async (req,res)=>{
-  const user = new User({
-        firstName : "Atharva",
-        lastName : "Deshpande",
-        emailId : "deshpandeatharva10@gmail.com",
-        password : "deshpande@123"
-    });
+  const user = new User(req.body);
   
     try{
         await user.save();
