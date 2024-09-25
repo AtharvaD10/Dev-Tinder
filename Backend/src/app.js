@@ -2,23 +2,18 @@ const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user");
 
-
 const app = express();
 app.use(express.json())
 
 app.post("/signup",async (req,res)=>{
   const user = new User(req.body);
-  
     try{
         await user.save();
         res.send("User added sucessfully...");
     }catch(err){
         res.status(400).send("Error :"+err.message);
     }
-  
-    
 });
-
 
 app.get("/user",async (req,res)=>{
     const userEmail = req.body.emailId ;
@@ -36,7 +31,6 @@ app.get("/user",async (req,res)=>{
     }  
 });
 
-
 app.get("/feed",async (req,res)=>{
     const users =  await User.find({});
     try{
@@ -45,6 +39,32 @@ app.get("/feed",async (req,res)=>{
         res.status(400).send("No user...")
     }
 })
+
+app.delete("/user",async (req,res)=>{
+    const userId = req.body.userId;
+    try{
+        const userID = User.findByIdAndDelete(userId)
+        res.send("User deleted Sucessfully\....")
+    }catch(err){
+        res.status(400).send("No user...")
+    }
+})
+
+app.patch("/user",async (req,res)=>{
+    const userId = req.body.userId;
+    const data = req.body;
+    try{
+        await User.findByIdAndUpdate({_id: userId},data, {
+           returnDocument : "after",
+            runValidators : true
+        });
+
+        res.send("user updated sucessfully")
+    }catch(err){
+        res.status(400).send("Update failed!!!"+ err.message)
+    }
+})
+
 connectDB()
         .then(()=>{
             console.log("Database Connection Sucessfully...");
