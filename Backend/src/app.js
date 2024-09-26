@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user");
+const { Error } = require("mongoose");
 
 const app = express();
 app.use(express.json())
@@ -50,10 +51,35 @@ app.delete("/user",async (req,res)=>{
     }
 })
 
-app.patch("/user",async (req,res)=>{
-    const userId = req.body.userId;
+app.patch("/user/:userId",async (req,res)=>{
+    const userId = req.params?.userId;
+    // console.log(userId);
     const data = req.body;
+    // console.log(data);
+    
     try{
+            const ALLOWED_UPDATES = [
+                "photoUrl",
+                "about",
+                "age",
+                "skills",
+                "gender"
+            ];
+        
+            const isUpdateAllowed = Object.keys(data).every((k)=>
+                ALLOWED_UPDATES.includes(k)
+               //{  return ALLOWED_UPDATES.includes(k)}
+            );
+        
+            if(!isUpdateAllowed){
+               throw new Error("Updaet not allowed");
+            }
+            
+            if(data?.skills.length > 10){
+                throw new Error ("Skills can not be more that 10")
+            }
+        
+            
         await User.findByIdAndUpdate({_id: userId},data, {
            returnDocument : "after",
             runValidators : true
