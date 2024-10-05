@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user")
 
-
+require('dotenv').config();
+const JWT_TOKEN = process.env.JWT_TOKEN
 const userAuth = async(req,res,next)=>{
    try{
           const {token} = req.cookies;
@@ -10,7 +11,7 @@ const userAuth = async(req,res,next)=>{
                     throw new Error("Token is not there")
              }
 
-        const isTokenValid = await jwt.verify(token,"$Dev@Tinder#45")
+        const isTokenValid = await jwt.verify(token,JWT_TOKEN)
 
         const {_id} = isTokenValid;
         const user =await User.findById(_id);

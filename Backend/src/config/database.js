@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+require('dotenv').config();
 
+const DB_URL = process.env.DB_URL;
 
 const connectDB = async()=>{
    await mongoose.connect(
-    "mongodb+srv://Atharva:FzrNpqAG7cOMR2o9@namaste-node.ktjf5.mongodb.net/devTinder");
+    DB_URL);
 };
 
 module.exports = connectDB;
