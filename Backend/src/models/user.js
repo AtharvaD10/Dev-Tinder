@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator")
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
-
 require('dotenv').config();
 const JWT_TOKEN = process.env.JWT_TOKEN
 
@@ -67,6 +66,14 @@ const userSchema = mongoose.Schema({
     },
     skills : {
         type : [String]
+    },
+     resetPasswordToken: {
+        type: String,
+        default: null
+    },
+    resetPasswordExpires: {
+        type: Date,
+        default: null
     }
 }, {
     timestamps : true
