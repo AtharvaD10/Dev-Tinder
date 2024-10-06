@@ -58,16 +58,14 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     }
 });
 
-// Forget Password API
-profileRouter.post('/forgetPassword', async (req, res) => {
-    const { emailId } = req.body; // Keeping emailId as the field name
+profileRouter.post('/profile/forgetPassword', async (req, res) => {
+    const { emailId } = req.body; 
 
     try {
         const user = await User.findOne({ emailId });
         if (!user) {
             return res.status(404).send('User not found');
         }
-
         // Generate a reset token
         const token = jwt.sign({ email: user.emailId }, process.env.JWT_TOKEN, { expiresIn: '1h' });
 
@@ -82,20 +80,20 @@ profileRouter.post('/forgetPassword', async (req, res) => {
 });
 
 // Reset Password API
-profileRouter.post('/resetPassword/:token', async (req, res) => {
+profileRouter.post('/profile/resetPassword/:token', async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_TOKEN);
-        const user = await User.findOne({ emailId: decoded.email }); // Keep emailId as the field name
+        const user = await User.findOne({ emailId: decoded.email }); 
 
         if (!user) {
             return res.status(404).send('User not found');
         }
 
         // Hash the new password
-        const hashedPassword = await bcrypt.hash(newPassword, 10); // Use a higher salt rounds
+        const hashedPassword = await bcrypt.hash(newPassword, 10); 
         user.password = hashedPassword;
         await user.save();
 
