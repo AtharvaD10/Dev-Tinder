@@ -8,7 +8,7 @@ const userAuth = async(req,res,next)=>{
           const {token} = req.cookies;
       
           if(!token){
-                    throw new Error("Token is not there")
+                return res.status(401).send("Please Login");
              }
 
         const isTokenValid = await jwt.verify(token,JWT_TOKEN)
