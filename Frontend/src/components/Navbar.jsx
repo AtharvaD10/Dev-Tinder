@@ -3,6 +3,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../utils/constants'
+import {removeUser} from '../utils/userSlice'
 
 const Navbar = () => {
 
@@ -16,7 +17,7 @@ const Navbar = () => {
                 {withCredentials: true}
             )
             dispatch(removeUser())
-            return navigate("/login")
+                 return navigate("/login")
         } catch (err) {
             console.error(err)
         }
@@ -34,7 +35,7 @@ const Navbar = () => {
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                         <div className="w-12 rounded-full">
                             <img
-                                alt="Tailwind CSS Navbar component"
+                                alt=""
                                 src={user.photoUrl} />
                         </div>
                     </div>
