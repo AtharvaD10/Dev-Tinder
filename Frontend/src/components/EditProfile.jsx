@@ -15,11 +15,10 @@ const EditProfile = ({ user }) => {
     const dispatch = useDispatch();
     const [showToast, setShowToast] = useState(false);
     const saveProfile = async () => {
-        //Clear Errors
         setError("");
         try {
             const res = await axios.patch(
-                BASE_URL + "/profile/edit",
+                `${BASE_URL}/profile/edit`,
                 {
                     firstName,
                     lastName,

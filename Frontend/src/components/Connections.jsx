@@ -10,11 +10,11 @@ const Connections = () => {
 
   const fetchConnections = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/user/connections", {
+      const res = await axios.get(`${BASE_URL}/user/connections`, {
         withCredentials: true,
       });
-      console.log(res.data); // Log the response data
-      dispatch(addConnections(res.data.data)); // Dispatch the connections to Redux
+      console.log(res.data);
+      dispatch(addConnections(res.data.data)); 
     } catch (err) {
       console.log(err);
     }

@@ -10,7 +10,7 @@ const Requests = () => {
 
   const fetchRequests = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/user/requests/received", {
+      const res = await axios.get(`${BASE_URL}/user/requests/received`, {
         withCredentials: true,
       });
       console.log(res);
@@ -23,12 +23,20 @@ const Requests = () => {
     fetchRequests();
   }, []);
 
-  
+  const handleRequest = async(status,_id) =>{
+    try{
+        const res = await axios.post(`${BASE_URL}/request/review/${status}/${_id}`,{},{withCredentials:true});
+        dispatch(removeRequest(_id));
+    }catch(err){
+        console.log(err);
+    } 
+  }
+
   if(!requests) return;
   
   return (
     <div className="text-center my-10">
-      <h1 className="font-bold text-white text-3xl">Connections</h1>
+      <h1 className="font-bold text-white text-3xl">Requests</h1>
       { requests.length > 0 ? (
         requests.map((request) => {
           const { _id, firstName, lastName, photoUrl, age, gender, about } = request.fromUserId;
@@ -48,14 +56,14 @@ const Requests = () => {
                 <p>{about}</p>
               </div>
               <div>
-              <button className="btn btn-primary mx-2">Reject</button>
-              <button className="btn btn-secondary mx-2">Accepted</button>
+              <button className="btn btn-primary mx-2" onClick={()=>handleRequest("rejected","request._id")}>Reject</button>
+              <button className="btn btn-secondary mx-2" onClick={()=> handleRequest("accepted",request._id)}>Accepted</button>
               </div>
             </div>
           );
         })
       ) : (
-        <p>No connections found.</p>
+        <p>No Requests</p>
       )}
     </div>
   );
