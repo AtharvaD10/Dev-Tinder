@@ -17,7 +17,6 @@ authRouter.post("/signup",async (req,res)=>{
             const {firstName, lastName, emailId, password} = req.body;
             const hashPassword =  await bcrypt.hash(password,5);
             
-            
             //creating a new instance of user model
             const user = new User({
                 firstName,
@@ -25,8 +24,12 @@ authRouter.post("/signup",async (req,res)=>{
                 emailId,
                 password:hashPassword
             });
-              await user.save();
-              res.send("User added sucessfully...");
+              const savedUser = await user.save();
+              const token = await savedUser.getJWT();
+            res.cookie("token",token,{
+                expires : new Date(Date.now() + 8 * 3600000)
+            }) 
+              res.json({message:"User added sucessfully...", data:savedUser});
         }catch(err){
         res.status(400).send("Error :"+err.message);
     }
@@ -48,7 +51,9 @@ authRouter.post("/login",async(req,res)=>{
             //create a JWT token
             const token = await user.getJWT();
             //Add the token to cookie and send the response back to the user
-            res.cookie("token",token)
+            res.cookie("token",token,{
+                expires : new Date(Date.now() + 8 * 3600000)
+            })
             res.send(user)
            }else{
             throw new Error("Invalid credentials")
