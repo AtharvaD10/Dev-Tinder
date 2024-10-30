@@ -1,15 +1,26 @@
+import axios from 'axios';
 import React from 'react';
+import { BASE_URL } from '../utils/constants';
+import { useDispatch} from "react-redux";
+import { removeUSerFromFeed } from '../utils/feedSlice';
 
 const UserCard = ({ user }) => {
     console.log(user);
+    const dispatch = useDispatch();
     const {
-        firstName = 'Unknown',
-        lastName = '',
-        photoUrl = 'default_photo_url.jpg', 
-        gender = 'Not specified',
-        age = 'N/A',
-        about = 'No information available'
-    } = user || {}; 
+        _id,
+        firstName ,
+        lastName ,
+        photoUrl , 
+        gender ,
+        age ,
+        about 
+    } = user ; 
+
+    const handleRequest = async(status,_id)=>{
+        const res = await axios.post(`${BASE_URL}/request/send/${status}/${_id}`,{},{withCredentials:true});
+        dispatch(removeUSerFromFeed(_id))
+    }
 
     return (
         <div className="card bg-base-300 rounded-lg shadow-lg overflow-hidden w-100">
@@ -29,8 +40,10 @@ const UserCard = ({ user }) => {
                     className="h-24 bg-base-300 resize-none"
                 />
                 <div className="flex justify-between mt-4">
-                    <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200">Ignore</button>
-                    <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">Interested</button>
+                    <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200"
+                    onClick={()=>handleRequest("ignored",_id)}>Ignore</button>
+                    <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200"
+                     onClick={()=>handleRequest("interested",_id)}>Interested</button>
                 </div>
             </div>
         </div>
