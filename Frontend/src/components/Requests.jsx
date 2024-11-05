@@ -57,7 +57,7 @@ const Requests = () => {
               </div>
               <div>
               <button className="btn btn-primary mx-2" onClick={()=>handleRequest("rejected","request._id")}>Reject</button>
-              <button className="btn btn-secondary mx-2" onClick={()=> handleRequest("accepted",request._id)}>Accepted</button>
+              <button className="btn btn-secondary mx-2" onClick={()=> handleRequest("accepted",request._id)}>Accept</button>
               </div>
             </div>
           );
